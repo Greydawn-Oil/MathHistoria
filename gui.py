@@ -54,7 +54,11 @@ default_topic_choice = topic_choices[4] if len(topic_choices) > 4 else topic_cho
 TEXT = {
     "app_title": "MathHistoria",
     "app_subtitle": "AI 驱动的数学史论文生成器",
-    "integrity_note": "学术诚信提醒：生成内容仅用于学习、整理和写作辅助，请自行核对史实与参考文献，不要直接提交未经核验的模型输出。",
+    "integrity_note": (
+        "## ⚠️ 学术诚信警告 · Academic Integrity Warning\n\n"
+        "本工具生成的任何内容（`.tex` / `.pdf`）**严禁直接提交为课程作业**，此类行为构成**严重学术不端**，后果由使用者自行承担。\n\n"
+        "❌ **绝对禁止**：将 AI 输出直接复制或简单转述后作为论文提交；使用 AI 编造的文献而不加核实；隐瞒 AI 使用情况。\n\n"
+    ),
     "api_settings": "API 设置",
     "api_guide": (
         "新手建议：\n"
@@ -1028,11 +1032,18 @@ def merge_pdfs_handler(files, page_ranges_text, ui_language):
         yield _rt(ui_language, "merge_failed", message=message), None
 
 
+_api_key_missing = not bool(prefs.get("api_key", "").strip())
+
 with gr.Blocks(title="MathHistoria") as app:
     gr.Markdown(f"# {_tr('app_title')}\n{_tr('app_subtitle')}")
     gr.Markdown(_tr("integrity_note"))
 
-    with gr.Accordion(_tr("api_settings"), open=False):
+    if _api_key_missing:
+        gr.Markdown(
+            "> ⚠️ **使用前必读：你还没有填写 API Key，请展开下方「API 设置」，填入你的 Key 后再生成论文。**\n"
+        )
+
+    with gr.Accordion(_tr("api_settings"), open=_api_key_missing):
         ui_language = gr.State("zh")
         runtime_cache = gr.State(False)
         gr.Markdown(_tr("api_guide"))
@@ -1042,7 +1053,8 @@ with gr.Blocks(title="MathHistoria") as app:
             label=_tr("api_key"),
             type="password",
             value=prefs["api_key"],
-            placeholder="填写你的 Gemini API Key",
+            placeholder="填写你的 API Key，例如：sk-... 或 AIza...",
+            info="必填 · 推荐使用 Gemini 免费 Key（aistudio.google.com）或其他兼容 OpenAI 格式的 Key",
         )
         base_url = gr.Textbox(label=_tr("base_url"), value=prefs["base_url"])
         draft_model = gr.Textbox(label=_tr("draft_model"), value=prefs["draft_model"])
