@@ -788,8 +788,8 @@ paragraph 2"""
 
 def _get_word_count(language: str, depth: str) -> str:
     if language == "zh":
-        return {"popular": "3000", "undergraduate": "3500", "research": "4500"}.get(depth, "3500")
-    return {"popular": "1500", "undergraduate": "1800", "research": "2200"}.get(depth, "1800")
+        return {"popular": "2400", "undergraduate": "3000", "research": "3600"}.get(depth, "3000")
+    return {"popular": "1200", "undergraduate": "1500", "research": "1800"}.get(depth, "1500")
 
 
 def _build_existing_context_block(existing_context: str, brief: SectionBrief) -> tuple[str, str]:

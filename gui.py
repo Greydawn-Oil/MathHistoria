@@ -295,7 +295,7 @@ def _resolve_guided_settings(
     if section_mode == "fixed" and fixed_section_count:
         section_count = int(fixed_section_count)
 
-    subsection_range = "3-4" if resolved_structure == "more_stable" else "3-5"
+    subsection_range = "2-4"
     structure_hint = ""
     if resolved_structure == "more_stable":
         structure_hint = "Prefer a stable, conventionally structured paper. Keep chapter progression even and avoid abrupt jumps in scope."
